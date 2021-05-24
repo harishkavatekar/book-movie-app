@@ -18,9 +18,6 @@ export default function Controller() {
 
         getMovies();
     }, []);
-
-    console.log(moviesList);
-
     return (
         <Router>
             <Fragment>

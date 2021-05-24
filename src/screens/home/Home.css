@@ -18,8 +18,22 @@
 .filter-section {
     margin:16px;
     width: 24vw;
+    padding-top: 80px;
 }
 
 .movies-grid-list {
     padding: 20px !important;
+}
+
+.input-width {
+    width: 100%;
+    padding-bottom: 20px !important;
+}
+
+.apply-button {
+    width: 100%;
+}
+
+.movie-img {
+    cursor: pointer;
 }
