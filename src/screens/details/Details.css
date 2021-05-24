@@ -1,0 +1,10 @@
+.back-btn {
+    height: 24px;
+    cursor: pointer;
+    margin: 8px 0px 0px 24px !important;
+    color: #000;
+}
+
+.icon {
+    margin: -6px;
+}

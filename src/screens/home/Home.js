@@ -1,5 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import './Home.css'
+
+
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
@@ -18,6 +21,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
+import Details from '../details/Details';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -130,11 +134,13 @@ export default function Home(props) {
                     <GridList cellHeight={350} cols={4} >
                         {releasedMovies.map((movie) => (
                         <GridListTile key={movie.id} className="movies-grid-list">
-                            <img src={movie.poster_url} alt={movie.title} className="movie-img" />
-                            <GridListTileBar
-                            title={movie.title}
-                            subtitle= {<span>Release Date: {movie.release_date} </span>}
-                            />
+                            <Link to={{pathname:"/details", state: movie.id}}>
+                                <img src={movie.poster_url} alt={movie.title} className="movie-img" />
+                                <GridListTileBar
+                                    title={movie.title}
+                                    subtitle= {<span>Release Date: {movie.release_date} </span>}
+                                />
+                            </Link>
                         </GridListTile>
                         ))}
                     </GridList>
