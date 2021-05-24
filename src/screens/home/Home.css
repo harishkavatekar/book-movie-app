@@ -1,0 +1,25 @@
+.upcoming-movie-header {
+    background-color: #ff9999;
+    padding: 8px;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.released-movie-section {
+    display: flex;
+}
+
+.release-movies-list {
+    display: flex;
+    margin: 16px;
+    width: 76vw;
+}
+
+.filter-section {
+    margin:16px;
+    width: 24vw;
+}
+
+.movies-grid-list {
+    padding: 20px !important;
+}
