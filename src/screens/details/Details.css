@@ -8,3 +8,33 @@
 .icon {
     margin: -6px;
 }
+
+.movie-details-section {
+    display: flex;
+    margin: 40px 0px;
+}
+.movie-details-section .left {
+    width: 20vw;
+    padding-left: 24px;
+}
+.movie-details-section .middle {
+    width: 60vw;
+}
+.movie-details-section .right {
+    width: 20vw;
+}
+
+.margin {
+    margin: 16px 0px !important;
+}
+
+.video-align {
+    width: 50vw;
+
+}
+.video-section {
+    padding-left: 15px;
+}
+.artist-grid {
+    margin: 0px !important;
+}
