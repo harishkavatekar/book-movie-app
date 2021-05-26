@@ -28,6 +28,8 @@ const useStyles = makeStyles({
 
 export default function Details(props) {
 
+    console.log(props)
+
     const classes = useStyles();
     
     const movieId = (props.location && props.location.state) || {};
@@ -50,12 +52,11 @@ export default function Details(props) {
     // console.log(movieDetail);
     // console.log(movieDetail.data);
     const { data } = movieDetail;
-    console.log(data);
 
     const opts = {
         playerVars: {
         //   https://developers.google.com/youtube/player_parameters
-        //   autoplay: 1,
+          autoplay: 1,
         }
       };
 
@@ -66,9 +67,6 @@ export default function Details(props) {
         videoId = youTubeLink[youTubeLink.length - 1];
       }
       
-
-    // let {poster_url, rating, release_date,storyline,title, trailer_url, wiki_url} = data;
-    // console.log(data.poster_url);
     return (
         <div>
             <Header/>

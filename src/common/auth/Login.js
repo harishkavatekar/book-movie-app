@@ -1,60 +1,90 @@
 import React, {Fragment, useState} from 'react';
 
 import Button from '@material-ui/core/Button';
+import { useHistory } from 'react-router-dom';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
 
 
 export default function Login() {
 
+    
+    let history = useHistory();
+
     const [loginForm, setLoginForm] = useState({
-        id: 0,
         userName: '',
         password: ''
     })
 
-    const onFormSubmitted = (e) => {
-        // console.log(e);
-        // e.preventDefault();
-        // props.addSubscriberHandler(addSubscriberForm);
-        // setAddSubscriberForm({ id: 0, name: '', phone: ' ' });
-        // history.push("/");
+    const onFormSubmitted = async (e) => {
+        console.log(e);
+        e.preventDefault();
+
+        try {
+            
+            const {userName, password} = loginForm;
+            const authorizedToken = window.btoa(`${userName}:${password}`);
+            
+            const response = await fetch('/api/v1/auth/login', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    authorization: `Basic ${authorizedToken}`
+                }
+            })
+
+            const result = await response.json();
+            const token = response.headers.get('access-token');
+
+            if(response.ok){
+                sessionStorage.setItem('user-detail', JSON.stringify(result));
+                sessionStorage.setItem('token', token);
+                window.location = '/';
+            }else {
+                const error = new Error();
+                error.message = result.message || 'Something went wrong.';
+            }
+        } catch (error) {
+            alert(`Error: ${error.message}`);
+        }
     }
 
-    const loginInputChangeHandler = (e) => {
-        // const state = addSubscriberForm;
-        // state[e.target.name] = e.target.value;
-        // setAddSubscriberForm({ ...state})
+    const inputChangeHandler = (e) => {
+        const state = loginForm;
+        state[e.target.name] = e.target.value;
+        setLoginForm({ ...state})
     }
+
+    const {userName, password} = loginForm;
 
     return (
-        <p>
             <ValidatorForm className="subscriber-form" onSubmit={(e) =>onFormSubmitted(e)}>
                 <TextValidator
-                    id="email"
-                    type="email"
-                    name="username" 
+                    id="username"
+                    type="text"
+                    name="userName" 
                     label="Username*"
+                    value={userName}
                     className="form-input"
-                    onChange={loginInputChangeHandler}
+                    onChange={inputChangeHandler}
                     validators={['required']}
-                    errorMessages={['Username required']}>
+                    errorMessages={['Username required']}
+                    >
                 </TextValidator>
 
                 <TextValidator
-                    id="pass"
+                    id="password"
                     type="password"
                     label="Password*"
                     name="password"
+                    value={password}
                     className="form-input"
-                    onChange={loginInputChangeHandler}
-                    validators={['required', 'isNumber']}
-                    errorMessages={['Enter password']}>
-
+                    onChange={inputChangeHandler}
+                    validators={['required']}
+                    errorMessages={['Enter password']}
+                    >
                 </TextValidator>
 
                 <Button type="submit" variant="contained" color="primary" className="login-btn">Login</Button>
             </ValidatorForm>
-
-        </p>
     )
 }

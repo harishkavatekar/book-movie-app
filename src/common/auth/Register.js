@@ -27,31 +27,32 @@ export default function Register() {
     const onFormSubmitted = async (e) => {
         // console.log(e);
         e.preventDefault();
-        const registerData = registerForm;
-        const response = await fetch('/api/v1/signup', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(registerData)
-        });
-        const data = await response.json();
-
-        if(data){
-            setRegSuccess("Registration successful. Please Login!")
+        try {
+            const registerData = registerForm;
+            const response = await fetch('/api/v1/signup', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(registerData)
+            });
+            const data = await response.json();
+            if(response.ok){
+                setRegSuccess("Registration successful. Please Login!")
+            }else {
+                const error = new Error();
+                error.message = data.message || 'Something went wrong.';
+            }
+            setRegisterForm({id: 0,email_address: '',first_name: '',last_name: '',mobile_number: '', password: ''})
+        } catch (error) {
+            setRegSuccess(error.message);
         }
-        console.log(data);
-
-        setRegisterForm({id: 0,email_address: '',first_name: '',last_name: '',mobile_number: '', password: ''})
     }
 
     const {email_address, first_name, last_name, mobile_number, password} = registerForm;
 
-    console.log(regSuccess);
-
     return (
 
-        <p>
             <ValidatorForm className="subscriber-form" onSubmit={(e) =>onFormSubmitted(e)}>
                 <TextValidator
                     id="firstName"
@@ -118,6 +119,5 @@ export default function Register() {
 
                 <Button type="submit" variant="contained" color="primary" className="reg-btn">Register</Button>
             </ValidatorForm>
-        </p>
     )
 }

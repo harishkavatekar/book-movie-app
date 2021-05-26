@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Header.css';
 import logoIcon from '../../assets/logo.svg';
 import Button from '@material-ui/core/Button';
@@ -14,6 +14,7 @@ import Box from '@material-ui/core/Box';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
 import Login from '../auth/Login';
 import Register from '../auth/Register';
+import useToken from '../auth/useToken';
 
 
 function TabPanel(props) {
@@ -57,7 +58,11 @@ function TabPanel(props) {
   }));
 
 
-const Header = function(){
+const Header = function(props){
+
+    const pathname = window.location.pathname
+
+    const { token, setToken } = useToken();
 
     const classes = useStyles();
     const theme = useTheme();
@@ -82,6 +87,11 @@ const Header = function(){
         setShowModel(false);
     }
 
+    const onLogout = () => {
+      sessionStorage.clear();
+      window.location.href = '/';
+    }
+    
 
     return (
         <div className="header">
@@ -89,9 +99,18 @@ const Header = function(){
                 <img src={logoIcon} className="logo-icon"/>
             </div>
             <div className="button-section">
-                <Button variant="contained" color="primary" className="btn-align">Book Show</Button>
-                <Button variant="contained" className="btn-align" onClick={handleOpenModal}>Login</Button>
-                <Button variant="contained" className="btn-align">Logout</Button>
+                {(token && pathname == '/details')?(
+                  <Button variant="contained" color="primary" className="btn-align">Book Show</Button>
+                ): null }
+
+                {token? (
+                  <Button variant="contained" className="btn-align" onClick={onLogout}>Logout</Button>
+                ): null}
+                {!token? ( 
+                  <Button variant="contained" className="btn-align" onClick={handleOpenModal}>Login</Button>
+                ): null}
+                
+                
 
                 <ReactModal 
                     isOpen={showModel}
@@ -120,10 +139,15 @@ const Header = function(){
                         onChangeIndex={handleChangeIndex}
                     >
                         <TabPanel value={value} index={0} dir={theme.direction} className="tab-content">
-                            <Login/>
+                            <Typography>
+                              <Login />
+                            </Typography>
+                            
                         </TabPanel>
                         <TabPanel value={value} index={1} dir={theme.direction} className="tab-content">
-                            <Register/>
+                            <Typography>
+                              <Register/>
+                            </Typography>
                         </TabPanel>
                         
                     </SwipeableViews>
