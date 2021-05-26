@@ -28,8 +28,6 @@ const useStyles = makeStyles({
 
 export default function Details(props) {
 
-    console.log(props)
-
     const classes = useStyles();
     
     const movieId = (props.location && props.location.state) || {};
@@ -40,7 +38,6 @@ export default function Details(props) {
         const getMovieDetails = async () => {
             const response = await fetch('/api/v1/movies/'+ movieId);
             const data = await response.json();
-            console.log(data);
             setMovieDetail(movieDetail => ({...movieDetail, data}))
         }
 
@@ -69,7 +66,7 @@ export default function Details(props) {
       
     return (
         <div>
-            <Header/>
+            <Header movieId= {movieId}/>
             <Link to="/">
                 <Typography variant="button" display="block" className="back-btn">
                     <ArrowBackIosIcon fontSize="small" className="icon"/> Back to Home

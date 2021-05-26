@@ -15,6 +15,7 @@ import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
 import Login from '../auth/Login';
 import Register from '../auth/Register';
 import useToken from '../auth/useToken';
+import { Link, useHistory } from 'react-router-dom';
 
 
 function TabPanel(props) {
@@ -60,6 +61,8 @@ function TabPanel(props) {
 
 const Header = function(props){
 
+  let history = useHistory();
+
     const pathname = window.location.pathname
 
     const { token, setToken } = useToken();
@@ -68,6 +71,8 @@ const Header = function(props){
     const theme = useTheme();
     const [value, setValue] = useState(0);
     const [showModel, setShowModel] = useState(false);
+
+    const [showBookModel, setBookModel] = useState(false);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -91,7 +96,14 @@ const Header = function(props){
       sessionStorage.clear();
       window.location.href = '/';
     }
-    
+
+    const handleBookShowModel = () => {
+      if(!token){
+        setShowModel(true);
+      } 
+
+      history.push("/bookshow/" + props.movieId);
+    }
 
     return (
         <div className="header">
@@ -99,8 +111,10 @@ const Header = function(props){
                 <img src={logoIcon} className="logo-icon"/>
             </div>
             <div className="button-section">
-                {(token && pathname == '/details')?(
-                  <Button variant="contained" color="primary" className="btn-align">Book Show</Button>
+                {(pathname == '/details')?(
+                  // <Link to={"/bookshow/" + props.movieId}>
+                    <Button variant="contained" color="primary" className="btn-align" onClick={handleBookShowModel}>Book Show</Button>
+                  // </Link>
                 ): null }
 
                 {token? (
