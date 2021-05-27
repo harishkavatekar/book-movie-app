@@ -1,14 +1,10 @@
-import React, {Fragment, useState} from 'react';
+import React, { useState } from 'react';
 
 import Button from '@material-ui/core/Button';
-import { useHistory } from 'react-router-dom';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
 
 
 export default function Login() {
-
-    
-    let history = useHistory();
 
     const [loginForm, setLoginForm] = useState({
         userName: '',
@@ -20,10 +16,10 @@ export default function Login() {
         e.preventDefault();
 
         try {
-            
-            const {userName, password} = loginForm;
+
+            const { userName, password } = loginForm;
             const authorizedToken = window.btoa(`${userName}:${password}`);
-            
+
             const response = await fetch('/api/v1/auth/login', {
                 method: "POST",
                 headers: {
@@ -35,11 +31,11 @@ export default function Login() {
             const result = await response.json();
             const token = response.headers.get('access-token');
 
-            if(response.ok){
+            if (response.ok) {
                 sessionStorage.setItem('user-detail', JSON.stringify(result));
                 sessionStorage.setItem('token', token);
                 window.location = '/';
-            }else {
+            } else {
                 const error = new Error();
                 error.message = result.message || 'Something went wrong.';
             }
@@ -51,40 +47,40 @@ export default function Login() {
     const inputChangeHandler = (e) => {
         const state = loginForm;
         state[e.target.name] = e.target.value;
-        setLoginForm({ ...state})
+        setLoginForm({ ...state })
     }
 
-    const {userName, password} = loginForm;
+    const { userName, password } = loginForm;
 
     return (
-            <ValidatorForm className="subscriber-form" onSubmit={(e) =>onFormSubmitted(e)}>
-                <TextValidator
-                    id="username"
-                    type="text"
-                    name="userName" 
-                    label="Username*"
-                    value={userName}
-                    className="form-input"
-                    onChange={inputChangeHandler}
-                    validators={['required']}
-                    errorMessages={['Username required']}
-                    >
-                </TextValidator>
+        <ValidatorForm className="subscriber-form" onSubmit={(e) => onFormSubmitted(e)}>
+            <TextValidator
+                id="username"
+                type="text"
+                name="userName"
+                label="Username*"
+                value={userName}
+                className="form-input"
+                onChange={inputChangeHandler}
+                validators={['required']}
+                errorMessages={['Username required']}
+            >
+            </TextValidator>
 
-                <TextValidator
-                    id="password"
-                    type="password"
-                    label="Password*"
-                    name="password"
-                    value={password}
-                    className="form-input"
-                    onChange={inputChangeHandler}
-                    validators={['required']}
-                    errorMessages={['Enter password']}
-                    >
-                </TextValidator>
+            <TextValidator
+                id="password"
+                type="password"
+                label="Password*"
+                name="password"
+                value={password}
+                className="form-input"
+                onChange={inputChangeHandler}
+                validators={['required']}
+                errorMessages={['Enter password']}
+            >
+            </TextValidator>
 
-                <Button type="submit" variant="contained" color="primary" className="login-btn">Login</Button>
-            </ValidatorForm>
+            <Button type="submit" variant="contained" color="primary" className="login-btn">Login</Button>
+        </ValidatorForm>
     )
 }

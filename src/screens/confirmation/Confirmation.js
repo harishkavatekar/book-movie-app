@@ -49,7 +49,7 @@ const Confirmation = (props) => {
       tickets: [props.location.bookingSummary.tickets.toString()],
     });
 
-    fetch(props.baseUrl + "bookings", {
+    fetch("/api/v1/" + "bookings", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -75,7 +75,7 @@ const Confirmation = (props) => {
   };
 
   const couponApplyHandler = () => {
-    fetch(props.baseUrl + "movies/" + props.match.params.id, {
+    fetch("/api/v1/" + "movies/" + props.match.params.id, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

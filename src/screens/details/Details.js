@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import './Details.css'
 
 import { Link } from 'react-router-dom';
@@ -17,34 +17,35 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 
 const useStyles = makeStyles({
     bold: {
-      fontWeight: 600,
-      paddingLeft:15
+        fontWeight: 600,
+        paddingLeft: 15
     },
     emptyStar: {
         color: '#000'
     },
     color: "Yellow"
-  })
+})
 
 export default function Details(props) {
 
     const classes = useStyles();
-    
-    const movieId = (props.location && props.location.state) || {};
+
+    console.log(props);
+
+    const movieId = (props.match.params.id);
 
     const [movieDetail, setMovieDetail] = useState({})
 
     useEffect(() => {
         const getMovieDetails = async () => {
-            const response = await fetch('/api/v1/movies/'+ movieId);
+            const response = await fetch('/api/v1/movies/' + movieId);
             const data = await response.json();
-            setMovieDetail(movieDetail => ({...movieDetail, data}))
+            setMovieDetail(movieDetail => ({ ...movieDetail, data }))
         }
 
         getMovieDetails();
-        
-    }, []);
 
+    }, []);
 
     // console.log(movieDetail);
     // console.log(movieDetail.data);
@@ -52,99 +53,98 @@ export default function Details(props) {
 
     const opts = {
         playerVars: {
-        //   https://developers.google.com/youtube/player_parameters
-          autoplay: 1,
+            //   https://developers.google.com/youtube/player_parameters
+            autoplay: 1,
         }
-      };
+    };
 
-      let videoId = "";
+    let videoId = "";
 
-      if(data){
+    if (data) {
         const youTubeLink = data.trailer_url.split('=');
         videoId = youTubeLink[youTubeLink.length - 1];
-      }
-      
+    }
+
     return (
         <div>
-            <Header movieId= {movieId}/>
+            <Header movieDetail={props} />
             <Link to="/">
                 <Typography variant="button" display="block" className="back-btn">
-                    <ArrowBackIosIcon fontSize="small" className="icon"/> Back to Home
+                    <ArrowBackIosIcon fontSize="small" className="icon" /> Back to Home
                 </Typography>
-                
             </Link>
-            {data?(
-            <div className="movie-details-section">
-                <div className="left">
-                    <img src={data.poster_url} />
-                </div>
-                <div className="middle">
-                    <Typography variant="h2" component="h2">
-                        {data.title}
-                    </Typography>
-                    <Typography >
-                        <span className={classes.bold}>Genres:</span>
-                        {data.genres.map((item)=> 
-                            <span key={item}>{item}</span>,
-                        )}
-                    </Typography>
-                    <Typography>
-                       <span className={classes.bold}>Duration:</span>
-                       <span>{data.duration}</span>
-                    </Typography>
-                    <Typography>
-                       <span className={classes.bold}>Release Date:</span>
-                       <span>{data.release_date}</span>
-                    </Typography>
-                    <Typography>
-                       <span className={classes.bold}>Rating:</span>
-                       <span>{data.rating}</span>
-                    </Typography>
-                    <Typography className="margin">
-                       <span className={classes.bold}>Plot: </span>
-                       <span>
-                           <a href={data.wiki_url}>(wiki link)</a> 
-                            {data.storyline}
-                       </span>
-                    </Typography>
-
-                    <Typography variant="body1">
-                       <span className={classes.bold}>Trailor: </span>
-                    </Typography>
-                    <div className="video-section">
-                        <YouTube videoId={videoId} opts={opts}  className="video-align"/>
+            {data ? (
+                <div className="movie-details-section">
+                    <div className="left">
+                        <img src={data.poster_url} alt="movie_banner_image" />
                     </div>
+                    <div className="middle">
+                        <Typography variant="h2" component="h2">
+                            {data.title}
+                        </Typography>
+                        <Typography >
+                            <span className={classes.bold}>Genres:</span>
+                            {data.genres.map((item) =>
+                                <span key={item}>{item}</span>,
+                            )}
+                        </Typography>
+                        <Typography>
+                            <span className={classes.bold}>Duration:</span>
+                            <span>{data.duration}</span>
+                        </Typography>
+                        <Typography>
+                            <span className={classes.bold}>Release Date:</span>
+                            <span>{data.release_date}</span>
+                        </Typography>
+                        <Typography>
+                            <span className={classes.bold}>Rating:</span>
+                            <span>{data.rating}</span>
+                        </Typography>
+                        <Typography className="margin">
+                            <span className={classes.bold}>Plot: </span>
+                            <span>
+                                <a href={data.wiki_url}>(wiki link)</a>
+                                {data.storyline}
+                            </span>
+                        </Typography>
 
-                </div>
-                <div className="right">
-                    <Box component="fieldset" mb={3} borderColor="transparent">
-                        <Typography variant="h6">Rate this movie</Typography>
-                        <Rating
-                            name="customized-empty"
-                            defaultValue={0}
-                            precision={0.5}
-                            className={classes.color}
-                            emptyIcon={<StarBorderIcon fontSize="inherit" className={classes.emptyStar}/>}
-                        />
-                    </Box>
+                        <Typography variant="body1">
+                            <span className={classes.bold}>Trailor: </span>
+                        </Typography>
+                        <div className="video-section">
+                            <YouTube videoId={videoId} opts={opts} className="video-align" />
+                        </div>
 
-                    <div className="cast">
-                        <Typography variant="h6">Artists</Typography>
-                        <GridList cols={2} className="artist-grid">
-                            {data.artists.map((artist) => (
-                            <GridListTile key={artist.id}>
-                                <img src={artist.profile_url} alt={artist.first_name} />
-                                <GridListTileBar
-                                    title={artist.first_name + ' ' + artist.last_name}
-                                />
-                            </GridListTile>
-                        ))}
-                        </GridList>
                     </div>
-                
+                    <div className="right">
+                        <Box component="fieldset" mb={3} borderColor="transparent">
+                            <Typography variant="h6">Rate this movie</Typography>
+                            <Rating
+                                name="customized-empty"
+                                defaultValue={0}
+                                precision={0.5}
+                                className={classes.color}
+                                emptyIcon={<StarBorderIcon fontSize="inherit" className={classes.emptyStar} />}
+                            />
+                        </Box>
+
+                        <div className="cast">
+                            <Typography variant="h6">Artists</Typography>
+                            <GridList cols={2} className="artist-grid">
+                                {data.artists.map((artist) => (
+                                    <GridListTile key={artist.id}>
+                                        <img src={artist.profile_url} alt={artist.first_name} />
+                                        <GridListTileBar
+                                            title={artist.first_name + ' ' + artist.last_name}
+                                        />
+                                    </GridListTile>
+                                ))}
+                            </GridList>
+                        </div>
+
+                    </div>
                 </div>
-            </div>
-            ): null}
+            ) : null}
         </div>
     )
 }

@@ -14,6 +14,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import { Link } from "react-router-dom";
 
 const BookShow = (props) => {
+  console.log(props);
   const [location, setLocation] = useState("");
   const [theatre, setTheatre] = useState("");
   const [language, setLanguage] = useState("");
@@ -36,7 +37,7 @@ const BookShow = (props) => {
   useEffect(() => {
     let dataShows = null;
 
-    fetch(props.baseUrl + "movies/" + props.match.params.id + "/shows", {
+    fetch("/api/v1/movies/" + props.match.params.id + "/shows", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -193,17 +194,17 @@ const BookShow = (props) => {
 
   return (
     <div>
-      <Header baseUrl={props.baseUrl} />
+      <Header movieDetail={props} />
       <div className="bookShow">
         <Typography className="back">
-          <Link to={"/movie/" + props.match.params.id}>
+          <Link to={"/details/" + props.match.params.id}>
             &#60; Back to Movie Details
           </Link>
         </Typography>
 
         <Card className="cardStyle">
           <CardContent>
-            <Typography variant="headline" component="h2">
+            <Typography component="h2">
               BOOK SHOW
             </Typography>
             <br />
