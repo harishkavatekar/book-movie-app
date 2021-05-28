@@ -60,11 +60,17 @@ export default function Home(props) {
     const classes = useStyles();
     const cardClass = useCardStyles();
 
+    const [movieName, setMovieName] = useState('');
     const [genreList, setGenresList] = useState([]);
     const [artistList, setArtistList] = useState([]);
 
     const [genre, setGenre] = useState([]);
     const [artist, setArtist] = useState([]);
+
+    const [movieFilter, setMovieFilter] = useState(false);
+    const [releasedMoviesFilter, setReleasedMoviesFilter] = useState([]);
+
+    const [filterItem, setFilterItem] = useState([]);
 
 
 
@@ -95,18 +101,46 @@ export default function Home(props) {
 
     }, []);
 
-    const handleChange = (event) => {
-        setGenre(event.target.value);
-        setArtist(event.target.value);
-    };
 
-    const upcomingMovies = props.moviesList.filter((list) => {
+    let upcomingMovies = props.moviesList.filter((list) => {
         return list.status === 'PUBLISHED';
     })
 
-    const releasedMovies = props.moviesList.filter((list) => {
+    let releasedMovies = props.moviesList.filter((list) => {
         return list.status === 'RELEASED';
     })
+
+    const validateFilterHandler = () => {
+        let filter = false;
+        let filterItem = releasedMovies.filter((item)=> {
+
+            filter = movieName.toLocaleLowerCase().includes(item.title.toLocaleLowerCase());
+
+            if(genre.length >0){
+                // const filterGenres = item.genres.filter((eachItem)=>{
+                //     return genre.includes(eachItem);
+                // })
+
+                // if(filterGenres.length === 0){
+                //     filter = false
+                // }
+
+                filter = item.genres.every(detail => genre.includes(detail))
+            }
+
+            if(artist.length > 0){
+                filter = item.artists.every(name => artist.includes(name.first_name +" "+ name.last_name ))
+            }
+
+            return filter;
+        })
+
+        if(filterItem.length > 0){
+            setMovieFilter(true);
+            setFilterItem(filterItem);
+        }
+        console.log(filterItem);
+    }
 
     return (
         <div>
@@ -128,21 +162,43 @@ export default function Home(props) {
                 </div>
             </div>
             <div className="released-movie-section">
-                <div className="release-movies-list">
-                    <GridList cellHeight={350} cols={4} >
-                        {releasedMovies.map((movie) => (
-                            <GridListTile key={movie.id} className="movies-grid-list">
-                                <Link to={{ pathname: "/details/" + movie.id }}>
-                                    <img src={movie.poster_url} alt={movie.title} className="movie-img" />
+
+                {movieFilter? (
+                    <div className="release-movies-list">
+                        <GridList cellHeight={350} cols={4} className="movie-filter-grid">
+                        {filterItem.map((filterMovie, index) => (
+                            <GridListTile key={filterMovie.id} className="movies-grid-list">
+                                <Link to={{ pathname: "/details/" + filterMovie.id }}>
+                                    <img src={filterMovie.poster_url} alt={filterMovie.title} className="movie-img" />
                                     <GridListTileBar
-                                        title={movie.title}
-                                        subtitle={<span>Release Date: {movie.release_date} </span>}
+                                        title={filterMovie.title}
+                                        subtitle={<span>Release Date: {filterMovie.release_date} </span>}
                                     />
                                 </Link>
                             </GridListTile>
                         ))}
                     </GridList>
-                </div>
+                    </div>
+                ): null}
+                
+                {!movieFilter? (
+                    <div className="release-movies-list">
+                        <GridList cellHeight={350} cols={4} >
+                            {releasedMovies.map((movie) => (
+                                <GridListTile key={movie.id} className="movies-grid-list">
+                                    <Link to={{ pathname: "/details/" + movie.id }}>
+                                        <img src={movie.poster_url} alt={movie.title} className="movie-img" />
+                                        <GridListTileBar
+                                            title={movie.title}
+                                            subtitle={<span>Release Date: {movie.release_date} </span>}
+                                        />
+                                    </Link>
+                                </GridListTile>
+                            ))}
+                        </GridList>
+                    </div>
+                ):null}
+
                 <div className="filter-section">
                     <Card className={cardClass.root}>
                         <CardContent>
@@ -153,7 +209,11 @@ export default function Home(props) {
                             <form noValidate autoComplete="off">
 
                                 <FormControl className="input-width">
-                                    <TextField id="movie-name" label="Movie Name" />
+                                    <TextField 
+                                        id="movie-name" 
+                                        label="Movie Name" 
+                                        value={movieName}
+                                        onChange={(e)=>setMovieName(e.target.value)}/>
                                 </FormControl>
 
                                 <FormControl className="input-width">
@@ -163,7 +223,7 @@ export default function Home(props) {
                                         id="genre-mutiple-checkbox"
                                         multiple
                                         value={genre}
-                                        onChange={handleChange}
+                                        onChange={(e)=> setGenre(e.target.value)}
                                         input={<Input />}
                                         renderValue={(selected) => selected.join(', ')}
                                         MenuProps={MenuProps}
@@ -184,7 +244,7 @@ export default function Home(props) {
                                         id="artist-mutiple-checkbox"
                                         multiple
                                         value={artist}
-                                        onChange={handleChange}
+                                        onChange={(e)=> setArtist(e.target.value)}
                                         input={<Input />}
                                         renderValue={(selected) => selected.join(', ')}
                                         MenuProps={MenuProps}
@@ -220,7 +280,7 @@ export default function Home(props) {
                                         }}
                                     />
                                 </FormControl>
-                                <Button variant="contained" color="primary" className="apply-button">Apply</Button>
+                                <Button variant="contained" color="primary" className="apply-button" onClick={validateFilterHandler}>Apply</Button>
                             </form>
                         </CardContent>
                     </Card>

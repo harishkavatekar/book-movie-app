@@ -14,7 +14,7 @@ import Box from '@material-ui/core/Box';
 import Login from '../auth/Login';
 import Register from '../auth/Register';
 import useToken from '../auth/useToken';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 
 function TabPanel(props) {
@@ -55,6 +55,8 @@ const Header = function (props) {
 
   const pathname = props.movieDetail.location.pathname;
 
+  let history = useHistory();
+
   const { token } = useToken();
   const theme = useTheme();
   const [value, setValue] = useState(0);
@@ -87,7 +89,7 @@ const Header = function (props) {
     if (!token) {
       setShowModel(true);
     } else {
-      // history.push("/bookshow/" + props.movieId);
+      history.push("/bookshow/" + props.movieDetail.match.params.id);
     }
 
 
@@ -100,9 +102,9 @@ const Header = function (props) {
       </div>
       <div className="button-section">
         {(pathname.includes('/details')) ? (
-          <Link to={"/bookshow/" + props.movieDetail.match.params.id} >
+          // <Link to={"/bookshow/" + props.movieDetail.match.params.id} >
             <Button variant="contained" color="primary" className="btn-align" onClick={handleBookShowModel}>Book Show</Button>
-          </Link>
+          // </Link>
         ) : null}
         {token ? (
           <Button variant="contained" className="btn-align" onClick={onLogout}>Logout</Button>

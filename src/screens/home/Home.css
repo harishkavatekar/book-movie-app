@@ -37,3 +37,7 @@
 .movie-img {
     cursor: pointer;
 }
+
+.movie-filter-grid {
+    width: 100%;
+}
