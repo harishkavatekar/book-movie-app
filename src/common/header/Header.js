@@ -140,10 +140,10 @@ const Header = function (props) {
             onChangeIndex={handleChangeIndex}
           >
             <TabPanel value={value} index={0} dir={theme.direction} className="tab-content">
-                <Login />
+                <Login className="model-content"/>
             </TabPanel>
             <TabPanel value={value} index={1} dir={theme.direction} className="tab-content">
-                <Register />
+                <Register className="model-content"/>
             </TabPanel>
 
           </SwipeableViews>

@@ -9,7 +9,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import YouTube from 'react-youtube';
 import Rating from "@material-ui/lab/Rating";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
-import Box from '@material-ui/core/Box';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
@@ -53,8 +52,7 @@ export default function Details(props) {
 
     const opts = {
         playerVars: {
-            //   https://developers.google.com/youtube/player_parameters
-            // autoplay: 1,
+            autoplay: 1,
         }
     };
 
@@ -117,16 +115,14 @@ export default function Details(props) {
 
                     </div>
                     <div className="right">
-                        <Box component="fieldset" mb={3} borderColor="transparent">
-                            <Typography variant="h6">Rate this movie</Typography>
-                            <Rating
-                                name="customized-empty"
-                                defaultValue={0}
-                                precision={0.5}
-                                className={classes.color}
-                                emptyIcon={<StarBorderIcon fontSize="inherit" className={classes.emptyStar} />}
-                            />
-                        </Box>
+                        <Typography variant="h6">Rate this movie</Typography>
+                        <Rating
+                            name="customized-empty"
+                            defaultValue={0}
+                            precision={0.5}
+                            className={classes.color}
+                            emptyIcon={<StarBorderIcon fontSize="inherit" className={classes.emptyStar} />}
+                        />
 
                         <div className="cast">
                             <Typography variant="h6">Artists</Typography>
