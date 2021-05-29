@@ -14,7 +14,7 @@ import Box from '@material-ui/core/Box';
 import Login from '../auth/Login';
 import Register from '../auth/Register';
 import useToken from '../auth/useToken';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 
 function TabPanel(props) {
@@ -102,9 +102,7 @@ const Header = function (props) {
       </div>
       <div className="button-section">
         {(pathname.includes('/details')) ? (
-          // <Link to={"/bookshow/" + props.movieDetail.match.params.id} >
             <Button variant="contained" color="primary" className="btn-align" onClick={handleBookShowModel}>Book Show</Button>
-          // </Link>
         ) : null}
         {token ? (
           <Button variant="contained" className="btn-align" onClick={onLogout}>Logout</Button>
@@ -123,7 +121,7 @@ const Header = function (props) {
           className="model-align"
         >
 
-          <AppBar position="static" color="default">
+          <AppBar position="static" color="default" className="login-model-header">
             <Tabs
               value={value}
               onChange={handleChange}
@@ -142,15 +140,10 @@ const Header = function (props) {
             onChangeIndex={handleChangeIndex}
           >
             <TabPanel value={value} index={0} dir={theme.direction} className="tab-content">
-              <Typography>
                 <Login />
-              </Typography>
-
             </TabPanel>
             <TabPanel value={value} index={1} dir={theme.direction} className="tab-content">
-              <Typography>
                 <Register />
-              </Typography>
             </TabPanel>
 
           </SwipeableViews>

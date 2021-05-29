@@ -24,6 +24,11 @@
     max-width: 320px;
     margin: 80px auto 0px;
     background: #fff;
+    border: 1px solid #ddd;
+}
+.login-model-header {
+    background: #fff !important;
+    box-shadow: none !important;
 }
 
 .tab-content {

@@ -68,7 +68,6 @@ export default function Home(props) {
     const [artist, setArtist] = useState([]);
 
     const [movieFilter, setMovieFilter] = useState(false);
-    const [releasedMoviesFilter, setReleasedMoviesFilter] = useState([]);
 
     const [filterItem, setFilterItem] = useState([]);
 
@@ -80,7 +79,7 @@ export default function Home(props) {
             const response = await fetch('/api/v1/genres');
             const genreData = await response.json();
             const genres = genreData.genres;
-            genres.map((item) => {
+            genres.forEach((item) => {
                 setGenresList(genreList => ([...genreList, item.genre]));
             })
 
@@ -90,7 +89,7 @@ export default function Home(props) {
             const response = await fetch('/api/v1/artists?limit=20');
             const artistData = await response.json();
             const artists = artistData.artists;
-            artists.map((item) => {
+            artists.forEach((item) => {
                 let firstAndLastname = item.first_name + " " + item.last_name;
                 setArtistList(artistList => ([...artistList, firstAndLastname]))
             })
@@ -117,14 +116,6 @@ export default function Home(props) {
             filter = movieName.toLocaleLowerCase().includes(item.title.toLocaleLowerCase());
 
             if(genre.length >0){
-                // const filterGenres = item.genres.filter((eachItem)=>{
-                //     return genre.includes(eachItem);
-                // })
-
-                // if(filterGenres.length === 0){
-                //     filter = false
-                // }
-
                 filter = item.genres.every(detail => genre.includes(detail))
             }
 
